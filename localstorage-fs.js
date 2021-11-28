@@ -1,24 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////
-// load & store the fs list to localStorage
+// Initial fns for file system
 ////////////////////////////////////////////////////////////////////////////////
+
+// check if localStorage entry exists
+// and correctly initialized with root directory
 const check_fs = () => {
-  // 1. check local-fs exist
-  if (localStorage.getItem("local-fs") === null) return false;
-  // 2. check the root
+  if (localStorage.getItem("local-fs") === null) return false;s
   let root = read_directory(0);
   if (!(root.type == "directory" && root.name == "/")) return false;
 
-  // pass the check
   return true;
 };
 
-// initialize fs with the root
+// initialize the fs
+// if fs does not exist, add localStorage entry and add root directory.
 export const init_fs = () => {
-  // only init when fs is empty or root not found
   if (!check_fs()) {
-    // add the root directory
-    // parent of root = root
-    let rootDir = new_directory("/", 0, {
+    let rootDir = new_directory("/", 0, { // parent of root = root
       type: "directory",
       name: "/",
       createAt: new Date(),
@@ -33,27 +31,32 @@ const clear_fs = () => {
   init_fs();
 };
 
+// load the file array from localStorage
 const load_fs = () => {
   return JSON.parse(localStorage.getItem("local-fs")) || [];
 };
 
+// store the given file arrya to localStorage
 const store_fs = (fsList) => {
   return localStorage.setItem("local-fs", JSON.stringify(fsList));
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// get new id
+// get_new_id: finding new array index for allocation
+// tries to find first empty cell,
+// if such cell does not exist, the array is extended
 export const get_new_id = () => {
   const fsList = load_fs();
-  // empty element is undefined
   for (let i = 0; i < fsList.length; i++) {
-    if (fsList[i] == undefined) {
+    if (fsList[i] == undefined) { // empty element is undefined
       return i;
     }
   }
-  // else, return the length
-  return fsList.length;
+  return fsList.length; // else, return the length
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Default object constructors of file / directory
+////////////////////////////////////////////////////////////////////////////////
 
 // default constructor for file object
 // name: string, parent: id of parent dir, data: object
@@ -66,8 +69,9 @@ export const new_file = (name, parent, data) => {
   };
 };
 
-// defualt constructor for directory
-// name: string, parent: id of parent dir, children: array of id of children file / directory
+// default constructor for directory
+// name: string, parent: id of parent dir, 
+// children: array of id of children file / directory
 export const new_directory = (name, parent, data) => {
   return {
     type: "directory",
@@ -79,7 +83,7 @@ export const new_directory = (name, parent, data) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// atomic fs access functions: read, write, delete
+// atomic fs access functions
 ////////////////////////////////////////////////////////////////////////////////
 const NotFileError = new Error("Not a file");
 const NotDirectoryError = new Error("Not a directory");
@@ -87,7 +91,8 @@ const NotExistError = new Error("Not exist");
 const AlreadyExistError = new Error("Already exist");
 
 // Implementation Detail
-// each funciton start with load_fs, end with store_fs, each exactly once (except read functions)
+// each funciton start with load_fs, end with store_fs, each exactly once
+// (except read functions)
 // think fsList as "cache" of the actual fs inside the localStorage
 
 // return file type at id
@@ -97,7 +102,6 @@ export const get_fs_type = (id) => {
   return loaded.type;
 };
 
-////////////////////////////////////////////////////////////////////////////////
 // return file at id
 export const read_file = (id) => {
   let fsList = load_fs();
@@ -118,7 +122,6 @@ export const read_directory = (id) => {
   return loaded;
 };
 
-////////////////////////////////////////////////////////////////////////////////
 // write a file at id
 export const write_file = (id, file) => {
   if (file.type != "file") {
@@ -151,6 +154,9 @@ export const write_directory = (id, directory) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// adding new files / directories under directory
+////////////////////////////////////////////////////////////////////////////////
+
 // add file to directory at id
 // also assigns new id to file
 // return id of new file
@@ -186,6 +192,8 @@ export const add_dir_to_dir = (id, new_dir) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 // remove file at id
+////////////////////////////////////////////////////////////////////////////////
+
 export const remove_file = (id) => {
   console.log("remove_file");
   let fsList = load_fs();
