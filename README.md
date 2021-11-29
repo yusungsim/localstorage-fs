@@ -6,11 +6,28 @@ Introduction
 
 This is JavaScript library for using localStorage API as file system with file and directory.
 
-### Library Features
 
-* Saving any JS object in browser localStorage, thus recoverable even after the browser shuts down.
-* Organising stored data in terms of files and directory.
-* Representing directory and file as an _abstract pointer_, which is implemented as JS object to be used in other JS code.
+Features
+---
+
+### Persistently store any JS object in browser localStorage.
+
+Modern browsers support [localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage),
+a set of key-associated data store that persists even after the browser shutdown.
+This library utilizes the localStorage API to persistently store any JS object and load it later.
+Thus, the stored objects can be recovered after the browser shutdown.
+  
+### Organizing stored data in terms of files and directory.
+
+The stored JS objects are organized similar to files in common file system.
+The library provides functions to manage hierarchical structure of files using directories. Directories store files and subdirectories. 
+
+### Representing directory and file as an abstract pointer, which is implemented as JS object to be used in other JS code.
+
+The library provides pointer-based high-level API to access files and directories.
+The API functions allow to read list of files and subdirectories, add a file or a subdirectory,
+modify the content of the file, and remove a file or a subdirectory.
+For the initial access to the file system, the library provides API function to return the root directory.
 
 
 Installation
@@ -26,6 +43,7 @@ Add to your NPM package dependency.
 }
    
 ```
+
 
 Usage
 ----
