@@ -2,10 +2,13 @@
 // Initial fns for file system
 ////////////////////////////////////////////////////////////////////////////////
 
+// key used to access the localStorage
+const fs_key = "local-fs"
+
 // check if localStorage entry exists
 // and correctly initialized with root directory
 const check_fs = () => {
-  if (localStorage.getItem("local-fs") === null) return false;s
+  if (localStorage.getItem(fs_key) === null) return false;
   let root = read_directory(0);
   if (!(root.type == "directory" && root.name == "/")) return false;
 
@@ -16,7 +19,8 @@ const check_fs = () => {
 // if fs does not exist, add localStorage entry and add root directory.
 export const init_fs = () => {
   if (!check_fs()) {
-    let rootDir = new_directory("/", 0, { // parent of root = root
+    let rootDir = new_directory("/", 0, {
+      // parent of root = root
       type: "directory",
       name: "/",
       createAt: new Date(),
@@ -27,18 +31,18 @@ export const init_fs = () => {
 
 // clear out the fs
 const clear_fs = () => {
-  localStorage.removeItem("local-fs");
+  localStorage.removeItem(fs_key);
   init_fs();
 };
 
 // load the file array from localStorage
 const load_fs = () => {
-  return JSON.parse(localStorage.getItem("local-fs")) || [];
+  return JSON.parse(localStorage.getItem(fs_key)) || [];
 };
 
 // store the given file arrya to localStorage
 const store_fs = (fsList) => {
-  return localStorage.setItem("local-fs", JSON.stringify(fsList));
+  return localStorage.setItem(fs_key, JSON.stringify(fsList));
 };
 
 // get_new_id: finding new array index for allocation
@@ -47,7 +51,8 @@ const store_fs = (fsList) => {
 export const get_new_id = () => {
   const fsList = load_fs();
   for (let i = 0; i < fsList.length; i++) {
-    if (fsList[i] == undefined) { // empty element is undefined
+    if (fsList[i] == undefined) {
+      // empty element is undefined
       return i;
     }
   }
@@ -70,7 +75,7 @@ export const new_file = (name, parent, data) => {
 };
 
 // default constructor for directory
-// name: string, parent: id of parent dir, 
+// name: string, parent: id of parent dir,
 // children: array of id of children file / directory
 export const new_directory = (name, parent, data) => {
   return {
