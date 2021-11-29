@@ -1,0 +1,19 @@
+{
+  "name": "localstorage-fs",
+  "version": "1.0.0",
+  "description": "A file system for browser localStorage",
+  "main": "fs-pointer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusungsim/localstorage-fs.git"
+  },
+  "author": "yusungsim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yusungsim/localstorage-fs/issues"
+  },
+  "homepage": "https://github.com/yusungsim/localstorage-fs#readme"
+}
