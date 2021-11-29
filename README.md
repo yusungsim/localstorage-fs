@@ -16,10 +16,16 @@ This is JavaScript library for using localStorage API as file system with file a
 Installation
 ----
 
-Clone the repository and use as ordinary js code.
+Add to your NPM package dependency.
 
-> TODO: upload to the NPM
-
+```json
+{
+  "dependencies": {
+    "@systemop/localstorage-fs": "1.0.0"
+  }
+}
+   
+```
 
 Usage
 ----
