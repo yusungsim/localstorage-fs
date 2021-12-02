@@ -1,6 +1,6 @@
 {
   "name": "@systemop/localstorage-fs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A file system for browser localStorage",
   "main": "fs-pointer.js",
   "scripts": {
