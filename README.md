@@ -48,4 +48,15 @@ Add to your NPM package dependency.
 Usage
 ----
 
-Refer to Wiki
+The module `fs-pointer` is exported as default upon import. Programmer can use all exported function in `fs-pointer` by import.
+
+```js
+// import the module with `require` statement
+const fsp = require("@systemop/localstorage-fs");
+
+// every exports in `fs-pointer` module are available.
+let root = fsp.get_root_pointer();
+let files = fsp.get_file_list(root)
+```
+
+Refer to [API documentations](https://github.com/yusungsim/localstorage-fs/wiki) for the details.
