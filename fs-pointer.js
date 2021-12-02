@@ -77,7 +77,7 @@ export const get_root_pointer = () => {
 };
 
 // error pointer
-export const error_pointer = (msg) => {
+const error_pointer = (msg) => {
   return {
     type: "error",
     msg: msg,

@@ -170,7 +170,7 @@ export const add_file_to_dir = (id, new_file) => {
   // check directory
   let dir = fsList[id] || { type: "error" };
   if (dir.type != "directory") {
-    throw NotFileError;
+    throw NotDirectoryError;
   }
   let new_id = get_new_id();
   fsList[new_id] = new_file;
@@ -186,7 +186,7 @@ export const add_dir_to_dir = (id, new_dir) => {
   let fsList = load_fs();
   let dir = fsList[id] || { type: "error" };
   if (dir.type != "directory") {
-    throw NotFileError;
+    throw NotDirectoryError;
   }
   let new_id = get_new_id();
   fsList[new_id] = new_dir;
