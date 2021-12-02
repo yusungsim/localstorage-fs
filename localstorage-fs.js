@@ -36,7 +36,7 @@ const clear_fs = () => {
 };
 
 // load the file array from localStorage
-const load_fs = () => {
+export const load_fs = () => {
   return JSON.parse(localStorage.getItem(fs_key)) || [];
 };
 
@@ -199,42 +199,52 @@ export const add_dir_to_dir = (id, new_dir) => {
 // remove file at id
 ////////////////////////////////////////////////////////////////////////////////
 
-export const remove_file = (id) => {
-  console.log("remove_file");
-  let fsList = load_fs();
-  console.log(fsList);
-  let file = fsList[id] || { type: "error" };
+export const remove_file = (id, temp_ls) => {
+  
+  let deleted_temp_ls = temp_ls
+  
+  let file = temp_ls[id] || { type: "error" };
   if (file.type != "file") {
     throw NotFileError;
   }
   // 1) delete link to this child from parent
-  let parent = fsList[file.parent] || { type: "error" };
+  let parent = temp_ls[file.parent] || { type: "error" };
   if (parent.type != "directory") {
     throw NotDirectoryError;
   }
   parent.children = parent.children.filter((child) => child != id);
   // 2) actually delete
-  delete fsList[id];
-  console.log(fsList);
-  store_fs(fsList);
+  delete deleted_temp_ls[id];
+  store_fs(deleted_temp_ls);
+  return deleted_temp_ls
 };
 
 // remove directory at id
-export const remove_directory = (id) => {
-  let fsList = load_fs();
-  let directory = fsList[id] || { type: "error" };
+export const remove_directory = (id, temp_ls) => {
+  
+  let deleted_temp_ls = temp_ls
+  let directory = temp_ls[id] || { type: "error" };
   if (directory.type != "directory") {
     throw NotDirectoryError;
   }
+  let parent = temp_ls[directory.parent] || { type: "error" };
+  if (parent.type != "directory") {
+    throw NotDirectoryError;
+  }
+  parent.children = parent.children.filter((child) => child != id);
   // recursively delete all children
+  
   directory.children.forEach((child) => {
-    if (child.type == "file") {
-      remove_file(child);
-    } else if (child.type == "directory") {
-      remove_directory(child);
+    if (temp_ls[child].type == "file") {
+      deleted_temp_ls= remove_file(child, temp_ls);
+    } else if (temp_ls[child].type == "directory") {
+      deleted_temp_ls= remove_directory(child, temp_ls);
     }
   });
   // finally delete the directory
-  delete fsList[id];
-  store_fs(fsList);
+  
+  delete deleted_temp_ls[id];
+  
+  store_fs(deleted_temp_ls);
+  return deleted_temp_ls
 };

@@ -144,11 +144,13 @@ export const add_dir_to_pointer = (fp, dirname, dirdata) => {
 
 // remove file or directory of given pointer
 export const remove_pointer = (fp) => {
+  
+  let temp_ls = lfs.load_fs()
   if (fp.type == "file") {
-    lfs.remove_file(fp.id);
+    lfs.remove_file(fp.id, temp_ls);
     return true;
   } else if (fp.type == "directory") {
-    lfs.remove_directory(fp.id);
+    lfs.remove_directory(fp.id, temp_ls);
     return true;
   } else return false; // TODO should return some id
 };
@@ -236,6 +238,17 @@ export const delete_file_by_data_predicate = (fp, predicate) => {
   });
   return true;
 };
+export const delete_dir_by_data_predicate = (fp, predicate) => {
+  let targetDirs = fp.dirs().filter((fp) => predicate(fp.data()));
+  if (targetDirs.length == 0) return false;
+  targetDirs.forEach((fp) => {
+    remove_pointer(fp);
+  });
+  return true;
+};
+
+
+
 
 export const modify_file_data_by_data_predicate = (fp, predicate, newData) => {
   let targetFiles = fp.files().filter((fp) => predicate(fp.data()));
